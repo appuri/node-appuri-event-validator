@@ -1,6 +1,6 @@
 {
   "name": "appuri-event-validator",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Validate events match Appuri's event schema",
   "main": "event-validator.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/appuri/node-appuri-event-validator.git"
+    "url": "git+https://github.com/appuri/appuri-event-validator-js.git"
   },
   "keywords": [
     "appuri",
@@ -19,10 +19,8 @@
   "author": "Appuri, Inc <info@appuri.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/appuri/node-appuri-event-validator/issues"
+    "url": "https://github.com/appuri/appuri-event-validator-js/issues"
   },
-  "homepage": "https://github.com/appuri/node-appuri-event-validator#readme",
-  "dependencies": {
-    "joi": "^8.0.5"
-  }
+  "homepage": "https://github.com/appuri/appuri-event-validator-js#readme",
+  "dependencies": {}
 }
