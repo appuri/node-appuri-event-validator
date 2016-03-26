@@ -1,9 +1,10 @@
 const validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
       evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
-      isoRegex = /(\d{4})-(\d{2})-(\d{2})T((\d{2}):(\d{2}):(\d{2}))\.(\d{3})Z/
+      isoRegex = /(\d{4})-(\d{2})-(\d{2})T((\d{2}):(\d{2}):(\d{2}))\.(\d{3})Z/,
+      reservedWords = new Set(require('./reserved-words'))
 
-function validateEvent(event) {
+function validateEvent(opts, event) {
   var errors = []
 
   if (event[event.entype === 'user' ? 'user_id' : 'enid'] == null) {
@@ -29,6 +30,14 @@ function validateEvent(event) {
         if (!validSqlRegex.test(k)) {
           errors.push(`Body key ${k} does not match ${validSqlRegex.toString()}`)
         }
+        if (reservedWords.has(k.toUpperCase())) {
+          if (opts.transformReservedWordKeys) {
+            event.body[k + '_'] = event.body[k]
+            delete event.body[k]
+          } else {
+            errors.push(`Body key ${k} is a reserved SQL keyword`)
+          }
+        }
       }
     }
   }
@@ -36,6 +45,14 @@ function validateEvent(event) {
   return errors
 }
 
-module.exports = validateEvent
-module.exports.isValid = e => !validateEvent(e).length
+module.exports = validateEvent.bind(null, {})
+
+// Convience method if you just need a yes or no answer
+module.exports.isValid = e => !validateEvent({}, e).length
+
+// Create a validator with transformation options
+module.exports.withOptions = opts => validateEvent.bind(null, opts)
+
+// Validate the events overall length. This is a separate method as it is expensive,
+// and often can be avoided when parsing and building the event from a CSV by pre-checking the line length
 module.exports.hasValidLength = e => !e.body || JSON.stringify(e.body).length < 32768
