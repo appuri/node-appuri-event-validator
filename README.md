@@ -1,6 +1,6 @@
 ## Appuri Event Validator
 
-A simple event validator based on [Joi](https://github.com/hapijs/joi) for posting events to [Appuri's Data Platform](https://appuri.readme.io/docs/event-format).
+A simple event validator for posting events to [Appuri's Data Platform](https://appuri.readme.io/docs/event-format).
 
 ### Usage
 

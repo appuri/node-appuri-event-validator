@@ -1,13 +1,13 @@
-const validSqlRegex = /^[a-z0-9_]+$/,
+const moment = require('moment'),
+      validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
       evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
-      isoRegex = /(\d{4})-(\d{2})-(\d{2})T((\d{2}):(\d{2}):(\d{2}))\.(\d{3})Z/,
       reservedWords = new Set(require('./reserved-words'))
 
 function validateEvent(opts, event) {
   var errors = []
 
-  if (event[event.entype === 'user' ? 'user_id' : 'enid'] == null) {
+  if (event[event.entype === 'user' || !event.entype ? 'user_id' : 'enid'] == null) {
     errors.push('you must specify user_id if entype is `user`, otherwise you must specify the `enid`')
   }
   if (event.user_id != null && (typeof event.user_id !== 'string' || event.user_id.length > 40 || !event.user_id.length)) {
@@ -19,7 +19,7 @@ function validateEvent(opts, event) {
   if (!evnameRegex.test(event.evname)) {
     errors.push('evname does not match ' + evnameRegex.toString())
   }
-  if (event.ts != null && !isoRegex.test(event.ts)) {
+  if (event.ts != null && !moment(event.ts, moment.ISO_8601, true).isValid()) {
     errors.push('ts is not a valid ISO timestamp')
   }
   if (event.body != null) {
