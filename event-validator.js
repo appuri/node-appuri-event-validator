@@ -13,6 +13,9 @@ function validateEvent(opts, event) {
   if (event.user_id != null && (typeof event.user_id !== 'string' || event.user_id.length > 40 || !event.user_id.length)) {
     errors.push('user_id must be a string less than 40 characters long')
   }
+  if (event.enid != null && (typeof event.enid !== 'string' || event.enid.length > 40 || !event.enid.length)) {
+    errors.push('enid must be a string less than 40 characters long')
+  }
   if (!entypeRegex.test(event.entype)) {
     errors.push('entype does not match ' + entypeRegex.toString())
   }
