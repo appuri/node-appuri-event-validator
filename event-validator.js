@@ -58,4 +58,4 @@ module.exports.withOptions = opts => validateEvent.bind(null, opts)
 
 // Validate the events overall length. This is a separate method as it is expensive,
 // and often can be avoided when parsing and building the event from a CSV by pre-checking the line length
-module.exports.hasValidLength = e => !e.body || JSON.stringify(e.body).length < 32768
+module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify(e.body), 'utf8') <= 32768
