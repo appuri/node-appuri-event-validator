@@ -1,4 +1,5 @@
-const moment = require('moment'),
+const crypto = require('crypto'),
+      moment = require('moment'),
       validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
       evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
@@ -71,17 +72,11 @@ module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify
 module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
 
 // ensure id will fit in 40 characters
-let crypto
 module.exports.normalizeId = id => {
-
-  if(!crypto) { crypto = require('crypto') }
-
   let result
   if(id) {
-
     result = id
     if(result.length > 40) {
-
       const md5Sum = crypto.createHash('md5')
       md5Sum.update(result)
       result = md5Sum.digest('hex')
