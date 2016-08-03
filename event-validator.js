@@ -73,7 +73,7 @@ module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/
 
 // ensure id will fit in 40 characters
 module.exports.normalizeId = id => {
-  let result
+  var result
   if(id) {
     result = id
     if(result.length > 40) {
