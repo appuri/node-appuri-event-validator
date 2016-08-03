@@ -66,3 +66,27 @@ module.exports.withOptions = opts => validateEvent.bind(null, opts)
 // Validate the events overall length. This is a separate method as it is expensive,
 // and often can be avoided when parsing and building the event from a CSV by pre-checking the line length
 module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify(e.body), 'utf8') <= 32768
+
+// ensure key will have valid sql name
+module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
+
+// ensure id will fit in 40 characters
+let crypto
+module.exports.normalizeId = id => {
+
+  if(!crypto) { crypto = require('crypto') }
+
+  let result
+  if(id) {
+
+    result = id
+    if(result.length > 40) {
+
+      const md5Sum = crypto.createHash('md5')
+      md5Sum.update(result)
+      result = md5Sum.digest('hex')
+    }
+  }
+
+  return result
+}
