@@ -1,4 +1,5 @@
-const moment = require('moment'),
+const crypto = require('crypto'),
+      moment = require('moment'),
       validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
       evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
@@ -66,3 +67,21 @@ module.exports.withOptions = opts => validateEvent.bind(null, opts)
 // Validate the events overall length. This is a separate method as it is expensive,
 // and often can be avoided when parsing and building the event from a CSV by pre-checking the line length
 module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify(e.body), 'utf8') <= 32768
+
+// ensure key will have valid sql name
+module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
+
+// ensure id will fit in 40 characters
+module.exports.normalizeId = id => {
+  let result
+  if(id) {
+    result = id
+    if(result.length > 40) {
+      const md5Sum = crypto.createHash('md5')
+      md5Sum.update(result)
+      result = md5Sum.digest('hex')
+    }
+  }
+
+  return result
+}
