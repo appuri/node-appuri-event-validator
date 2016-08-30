@@ -2,8 +2,7 @@ const crypto = require('crypto'),
       moment = require('moment'),
       validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
-      evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
-      reservedWords = new Set(require('./reserved-words'))
+      evnameRegex = /^(@set|[a-z0-9_]{1,40})$/
 
 function validateEvent(opts, event) {
   var errors = []
@@ -40,14 +39,6 @@ function validateEvent(opts, event) {
       for (var k in event.body) {
         if (!validSqlRegex.test(k)) {
           errors.push(`Body key ${k} does not match ${validSqlRegex.toString()}`)
-        }
-        if (reservedWords.has(k.toUpperCase())) {
-          if (opts.transformReservedWordKeys) {
-            event.body[k + '_'] = event.body[k]
-            delete event.body[k]
-          } else {
-            errors.push(`Body key ${k} is a reserved SQL keyword`)
-          }
         }
       }
     }
