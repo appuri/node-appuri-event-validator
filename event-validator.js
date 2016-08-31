@@ -28,8 +28,6 @@ function validateEvent(opts, event) {
 
     if(!ts.isValid()) {
       errors.push('ts is not a valid ISO timestamp')
-    } else if(ts.isAfter(theDayAfterTomorrow)) {
-      errors.push('ts is too far in the future')
     }
   }
   if (event.body != null) {
