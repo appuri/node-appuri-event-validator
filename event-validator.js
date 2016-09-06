@@ -39,14 +39,6 @@ function validateEvent(opts, event) {
         if (!validSqlRegex.test(k)) {
           errors.push(`Body key ${k} does not match ${validSqlRegex.toString()}`)
         }
-        if (reservedWords.has(k.toUpperCase())) {
-          if (opts.transformReservedWordKeys) {
-            event.body[k + '_'] = event.body[k]
-            delete event.body[k]
-          } else {
-            errors.push(`Body key ${k} is a reserved SQL keyword`)
-          }
-        }
       }
     }
   }
@@ -83,3 +75,9 @@ module.exports.normalizeId = id => {
 
   return result
 }
+
+// returns an array of body keys that are reserved SQL words
+// not needed since we now quote column names in Redshift
+module.exports.reservedWords = e => Object.keys(e.body).filter(k => reservedWords.has(k.toUpperCase()))
+
+module.exports.hasReservedWords = e => module.exports.reservedWords(e).length > 0
