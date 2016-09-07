@@ -26,4 +26,63 @@ describe('validate event', () => {
     validator.hasReservedWords(eventWithReservedWords).should.be.true
   })
 
+  it('should show an error for missing account_id for entype=account', () => {
+
+    const event = {
+      entype: 'account',
+      evname: '@set',
+      body: {
+        name: 'LiquidPlanner'
+      }
+    }
+
+    validator(event).should.deep.equal([
+      'you must specify account_id if entype is account otherwise you must specify the enid'
+    ])
+  })
+
+  it('should pass validation if account_id is set for entype=account', () => {
+
+    const event = {
+      entype: 'account',
+      evname: '@set',
+      account_id: '12345',
+      body: {
+        name: 'LiquidPlanner'
+      }
+    }
+
+    validator(event).should.be.empty
+  })
+
+  it('should show an error for missing user_id for entype=user', () => {
+
+    const event = {
+      entype: 'user',
+      evname: 'login',
+      body: {
+        name: 'Bilal Aslam'
+      }
+    }
+
+    validator(event).should.deep.equal([
+      'you must specify user_id if entype is user otherwise you must specify the enid'
+    ])
+  })
+
+  it('should pass validation if user_id is set for entype=user', () => {
+
+    const event = {
+      entype: 'user',
+      evname: 'login',
+      user_id: '12345',
+      body: {
+        name: 'Bilal Aslam'
+      }
+    }
+
+    validator(event).should.be.empty
+  })
+
+
 })

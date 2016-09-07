@@ -8,9 +8,15 @@ const crypto = require('crypto'),
 function validateEvent(opts, event) {
   var errors = []
 
-  if (event[event.entype === 'user' || !event.entype ? 'user_id' : 'enid'] == null) {
-    errors.push('you must specify user_id if entype is `user`, otherwise you must specify the `enid`')
-  }
+  const entities = ['user', 'account']
+
+  entities.forEach(e => {
+
+    if (event.entype === e && (event.enid == null && event[`${e}_id`] == null) ) {
+      errors.push(`you must specify ${e}_id if entype is ${e} otherwise you must specify the enid`)
+    }
+  })
+
   if (event.user_id != null && (typeof event.user_id !== 'string' || event.user_id.length > 40 || !event.user_id.length)) {
     errors.push('user_id must be a string less than 40 characters long')
   }
