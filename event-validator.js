@@ -29,13 +29,8 @@ function validateEvent(opts, event) {
   if (!evnameRegex.test(event.evname)) {
     errors.push('evname does not match ' + evnameRegex.toString())
   }
-  if (event.ts != null) {
-    const ts = moment(event.ts, moment.ISO_8601, true),
-          theDayAfterTomorrow = moment().add(2, 'days').add(-1, 'hour')
-
-    if(!ts.isValid()) {
-      errors.push('ts is not a valid ISO timestamp')
-    }
+  if (event.ts != null && !moment(event.ts, moment.ISO_8601, true).isValid()) {
+    errors.push('ts is not a valid ISO timestamp')
   }
   if (event.body != null) {
     if (typeof event.body !== 'object') {
