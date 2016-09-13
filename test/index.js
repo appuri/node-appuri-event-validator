@@ -153,3 +153,25 @@ describe('validate event', () => {
     }).should.be.empty
   })
 })
+
+describe('normalizeId', function() {
+  it('should leave lowercase ids as is', function() {
+    validator.normalizeId('foobar안녕!').should.equal('foobar안녕!')
+  })
+
+  it('should lowercase by default', function() {
+    validator.normalizeId('CUTE멍멍이_123').should.equal('cute멍멍이_123')
+  })
+
+  it('should not lowercase if requested', function() {
+    validator.normalizeId('CUTE멍멍이_123', false).should.equal('CUTE멍멍이_123')
+  })
+
+  it('should lowercase then hash long ids', function() {
+    validator.normalizeId('someREALLYlongemail@somereallycooldomainohyeah.org').should.equal('9f093e950b00655a8060ad9c99c982f8')
+  })
+
+  it('should hash long ids without lowercasing them if requested', function() {
+    validator.normalizeId('someREALLYlongemail@somereallycooldomainohyeah.org', false).should.equal('d64dec624070f7fe198426a62ad818fe')
+  })
+})

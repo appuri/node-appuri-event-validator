@@ -63,10 +63,13 @@ module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify
 module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
 
 // ensure id will fit in 40 characters
-module.exports.normalizeId = id => {
+module.exports.normalizeId = (id, toLower) => {
   var result
-  if(id) {
-    result = id
+  if (id) {
+    result = String(id)
+    if (toLower !== false) {
+      result = result.toLowerCase()
+    }
     if(result.length > 40) {
       const md5Sum = crypto.createHash('md5')
       md5Sum.update(result)
