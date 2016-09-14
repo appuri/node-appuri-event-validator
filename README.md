@@ -1,5 +1,7 @@
 ## Appuri Event Validator
 
+[![CircleCI](https://circleci.com/gh/appuri/node-appuri-event-validator/tree/master.svg?style=shield)](https://circleci.com/gh/appuri/node-appuri-event-validator/tree/master)
+
 A simple event validator for posting events to [Appuri's Data Platform](https://appuri.readme.io/docs/event-format).
 
 ### Usage
