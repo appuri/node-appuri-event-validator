@@ -10,6 +10,10 @@ function validateEvent(opts, event) {
 
   const entities = ['user', 'account']
 
+  if (!event || typeof event !== 'object' || typeof event.entype !== 'string' || typeof event.evname !== 'string') {
+    return ['Event must be an object with the entype and evname specified']
+  }
+
   entities.forEach(e => {
 
     if (event.entype === e && (event.enid == null && event[`${e}_id`] == null) ) {

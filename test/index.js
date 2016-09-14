@@ -12,6 +12,7 @@ const eventWithReservedWords = {
     name: 'Bilal'
   }
 }
+const basicValidationFailure = ['Event must be an object with the entype and evname specified']
 
 describe('validate event', () => {
 
@@ -21,6 +22,23 @@ describe('validate event', () => {
 
   it('should indicate event has reserved words', () => {
     validator.hasReservedWords(eventWithReservedWords).should.be.true
+  })
+
+  it('should fail for non-objects', function() {
+    validator().should.deep.equal(basicValidationFailure)
+    validator('hi').should.deep.equal(basicValidationFailure)
+  })
+
+  it('should fail if entype or evname is not specified as a string', function() {
+    validator({}).should.deep.equal(basicValidationFailure)
+    validator({ evname: 'login' }).should.deep.equal(basicValidationFailure)
+    validator({ evname: 'login', entype: 3 }).should.deep.equal(basicValidationFailure)
+  })
+
+  it('should fail if the entype is too long, short, or has invalid characters', function() {
+    validator({ evname: 'login', entype: '' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', entype: '사용자' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', entype: new Array(41).fill('a').join('') }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
   })
 
   it('should fail validation for missing account_id for entype=account', () => {
