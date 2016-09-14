@@ -29,13 +29,8 @@ function validateEvent(opts, event) {
   if (!evnameRegex.test(event.evname)) {
     errors.push('evname does not match ' + evnameRegex.toString())
   }
-  if (event.ts != null) {
-    const ts = moment(event.ts, moment.ISO_8601, true),
-          theDayAfterTomorrow = moment().add(2, 'days').add(-1, 'hour')
-
-    if(!ts.isValid()) {
-      errors.push('ts is not a valid ISO timestamp')
-    }
+  if (event.ts != null && !moment(event.ts, moment.ISO_8601, true).isValid()) {
+    errors.push('ts is not a valid ISO timestamp')
   }
   if (event.body != null) {
     if (typeof event.body !== 'object') {
@@ -68,10 +63,13 @@ module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify
 module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
 
 // ensure id will fit in 40 characters
-module.exports.normalizeId = id => {
+module.exports.normalizeId = (id, toLower) => {
   var result
-  if(id) {
-    result = id
+  if (id) {
+    result = String(id)
+    if (toLower !== false) {
+      result = result.toLowerCase()
+    }
     if(result.length > 40) {
       const md5Sum = crypto.createHash('md5')
       md5Sum.update(result)
