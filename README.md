@@ -23,3 +23,18 @@ true
      annotate: [Function] },
   value: { entype: 'user', evname: 'foobar', user_id: 'bob', ts: 123 } }
 ```
+
+#### validator.normalizeId
+
+A helper function will ensure a field is a 40-character string for a `user_id` by taking the md5 hash of it if it is over 40 characters. It also lowercases the string by default.
+
+```
+> validator.normalizeId('foo')
+'foo'
+> validator.normalizeId('FOO')
+'foo'
+> validator.normalizeId('FOO', false)
+'FOO'
+> validator.normalizeId('someREALLYlongemail@somereallycooldomainohyeah.org')
+'9f093e950b00655a8060ad9c99c982f8'
+```
