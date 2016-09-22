@@ -64,7 +64,7 @@ module.exports.withOptions = opts => validateEvent.bind(null, opts)
 module.exports.hasValidLength = e => !e.body || Buffer.byteLength(JSON.stringify(e.body), 'utf8') <= 32768
 
 // ensure key will have valid sql name
-module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]/ig, '_').toLowerCase()
+module.exports.normalizeKey = key => key.replace(/^\$/, '').replace(/[^a-z0-9_]+/ig, '_').toLowerCase()
 
 // ensure id will fit in 40 characters
 module.exports.normalizeId = (id, toLower) => {
