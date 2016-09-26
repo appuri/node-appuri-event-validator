@@ -36,9 +36,13 @@ describe('validate event', () => {
   })
 
   it('should fail if the entype is too long, short, or has invalid characters', function() {
-    validator({ evname: 'login', entype: '' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
-    validator({ evname: 'login', entype: '사용자' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
-    validator({ evname: 'login', entype: new Array(41).fill('a').join('') }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: '' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: '사용자' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: new Array(41).fill('a').join('') }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+  })
+
+  it('should fail if there is no enid for entypes not of user or account', function() {
+    validator({ evname: 'login', entype: 'logs' }).should.deep.equal(['you must specify the enid on entypes that are not user or account'])
   })
 
   it('should fail validation for missing account_id for entype=account', () => {

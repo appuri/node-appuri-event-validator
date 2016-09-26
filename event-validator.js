@@ -8,18 +8,21 @@ const crypto = require('crypto'),
 function validateEvent(opts, event) {
   var errors = []
 
-  const entities = ['user', 'account']
-
   if (!event || typeof event !== 'object' || typeof event.entype !== 'string' || typeof event.evname !== 'string') {
     return ['Event must be an object with the entype and evname specified']
   }
 
-  entities.forEach(e => {
-
-    if (event.entype === e && (event.enid == null && event[`${e}_id`] == null) ) {
-      errors.push(`you must specify ${e}_id if entype is ${e} otherwise you must specify the enid`)
+  if (event.entype === 'user') {
+    if (event.enid == null && event.user_id == null) {
+      errors.push(`you must specify user_id if entype is user otherwise you must specify the enid`)
     }
-  })
+  } else if (event.entype === 'account') {
+    if (event.enid == null && event.account_id == null) {
+      errors.push(`you must specify account_id if entype is account otherwise you must specify the enid`)
+    }
+  } else if (event.enid == null) {
+    errors.push(`you must specify the enid on entypes that are not user or account`)
+  }
 
   if (event.user_id != null && (typeof event.user_id !== 'string' || event.user_id.length > 40 || !event.user_id.length)) {
     errors.push('user_id must be a string less than 40 characters long')
