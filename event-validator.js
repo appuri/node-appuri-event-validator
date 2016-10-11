@@ -2,7 +2,7 @@ const crypto = require('crypto'),
       moment = require('moment'),
       validSqlRegex = /^[a-z0-9_]+$/,
       entypeRegex = /^[a-z0-9_]{1,20}$/,
-      evnameRegex = /^(@set|[a-z0-9_]{1,40})$/,
+      evnameRegex = /^(@set|[a-z0-9_]{1,80})$/,
       reservedWords = new Set(require('./reserved-words'))
 
 function validateEvent(opts, event) {
