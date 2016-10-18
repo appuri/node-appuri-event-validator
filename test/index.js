@@ -36,9 +36,21 @@ describe('validate event', () => {
   })
 
   it('should fail if the entype is too long, short, or has invalid characters', function() {
-    validator({ evname: 'login', enid: '1234', entype: '' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
-    validator({ evname: 'login', enid: '1234', entype: '사용자' }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
-    validator({ evname: 'login', enid: '1234', entype: new Array(41).fill('a').join('') }).should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: '' })
+      .should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: '사용자' })
+      .should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+    validator({ evname: 'login', enid: '1234', entype: new Array(41).fill('a').join('') })
+      .should.deep.equal(['entype does not match /^[a-z0-9_]{1,20}$/'])
+  })
+
+  it('should fail if the evname is too long, short, or has invalid characters', function() {
+    validator({ entype: 'telemetry', enid: '1234', evname: '' })
+      .should.deep.equal(['evname does not match /^(@set|[a-z0-9_]{1,80})$/'])
+    validator({ entype: 'telemetry', enid: '1234', evname: '사용자' })
+      .should.deep.equal(['evname does not match /^(@set|[a-z0-9_]{1,80})$/'])
+    validator({ entype: 'telemetry', enid: '1234', evname: new Array(81).fill('a').join('') })
+      .should.deep.equal(['evname does not match /^(@set|[a-z0-9_]{1,80})$/'])
   })
 
   it('should fail if there is no enid for entypes not of user or account', function() {

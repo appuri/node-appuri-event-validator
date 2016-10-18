@@ -1,6 +1,6 @@
 {
   "name": "appuri-event-validator",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Validate events match Appuri's event schema",
   "main": "event-validator.js",
   "scripts": {
